@@ -1,8 +1,5 @@
-# attendance_gps
+# Attendance Application using gps based on Flutter
 
-A new Flutter project.
-
-## Getting Started
 
 This project is a starting point for a Flutter application.
 
