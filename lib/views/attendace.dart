@@ -1,10 +1,9 @@
 import 'package:attendance_gps/views/widget.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
-import 'package:location/location.dart';
 import '../model/model.dart';
-import 'user.dart';
+import 'history.dart';
+import '../model/sql_helper.dart';
+import '../model/user.dart';
 
 class AttendancePage extends StatefulWidget {
   AttendancePage({Key? key}) : super(key: key);
@@ -17,12 +16,30 @@ class AttendancePage extends StatefulWidget {
 class _AttendancePageState extends State<AttendancePage> {
   final ModelService _modelService = ModelService();
   final MapsService _mapsService = MapsService();
+  late SQLHelper handler;
   double distance = 0;
+
   @override
   void initState() {
     _mapsService.getLoc();
-
     super.initState();
+    handler = SQLHelper();
+  }
+
+  String _location = '';
+  String _subject = '';
+
+  Future<int> addUsers() async {
+    User firstUser = User(
+      name: '${_modelService.attendaceValue[3]}',
+      nim: '12340801229',
+      location: '${_location}',
+      subject: '${_subject}',
+      date: '${_modelService.attendaceValue[0]}',
+    );
+
+    List<User> listOfUsers = [firstUser];
+    return await this.handler.insertUser(listOfUsers);
   }
 
   @override
@@ -89,25 +106,27 @@ class _AttendancePageState extends State<AttendancePage> {
                                 index++) {
                               _modelService.campusButton[index] = index == i;
                             }
+                            _location = _modelService.campusLocation[i];
                           });
-                          if (_modelService.campusLocation[i] ==
-                              'kebon jeruk') {
-                            setState(() {
-                              _mapsService.pinnedLocation = LatLng(
-                                  _modelService.campusKbj[0],
-                                  _modelService.campusKbj[1]);
-                              print(_mapsService.pinnedLocation);
-                              print(_mapsService.totalDistance);
-                            });
-                          } else {
-                            setState(() {
-                              _mapsService.pinnedLocation = LatLng(
-                                  _modelService.campusHi[0],
-                                  _modelService.campusHi[1]);
-                              print(_mapsService.pinnedLocation);
-                              print(_mapsService.totalDistance);
-                            });
-                          }
+                          // print(_modelService.campusButton[index]);
+                          // if (_modelService.campusLocation[i] ==
+                          //     'kebon jeruk') {
+                          //   setState(() {
+                          //     _mapsService.pinnedLocation = LatLng(
+                          //         _modelService.campusKbj[0],
+                          //         _modelService.campusKbj[1]);
+                          //     print(_mapsService.pinnedLocation);
+                          //     print(_mapsService.totalDistance);
+                          //   });
+                          // } else {
+                          //   setState(() {
+                          //     _mapsService.pinnedLocation = LatLng(
+                          //         _modelService.campusHi[0],
+                          //         _modelService.campusHi[1]);
+                          //     print(_mapsService.pinnedLocation);
+                          //     print(_mapsService.totalDistance);
+                          //   });
+                          // }
                         }),
                         child: Container(
                             decoration: BoxDecoration(
@@ -174,6 +193,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                 index++) {
                               _modelService.subjectButton[index] = index == i;
                             }
+                            _subject = _modelService.subject[i];
                           });
                         }),
                         child: Container(
@@ -245,7 +265,7 @@ class _AttendancePageState extends State<AttendancePage> {
                   Container(
                     margin: EdgeInsets.all(15),
                     child: MyUI().button(
-                      onTap: () {
+                      onTap: () async {
                         if (_mapsService.distance >= 0.05) {
                           final snackBar = SnackBar(
                             content: Text(
@@ -265,7 +285,12 @@ class _AttendancePageState extends State<AttendancePage> {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         } else {
-                          Navigator.of(context).pushNamed(UserPage.routeName);
+                          handler.initializeDB().whenComplete(() async {
+                            await this.addUsers();
+
+                            Navigator.of(context)
+                                .pushNamed(HistoryPage.routeName);
+                          });
                         }
                       },
                       title: 'Take Attendance'.toUpperCase(),

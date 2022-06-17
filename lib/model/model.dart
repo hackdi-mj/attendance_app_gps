@@ -6,7 +6,7 @@ import 'package:location/location.dart';
 class ModelService {
   List attendaceInfo = ['Date/Time', 'Semester', 'distance', 'Name'];
   List attendaceValue = ['date/time', '8', 38.0, 'Muhammad Jumadi'];
-  List campusLocation = ['kebon jeruk', 'harapan indah'];
+  List campusLocation = ['Kebon Jeruk', 'Harapan Indah'];
   List campusKbj = [-6.174639, 106.954637];
   List campusHi = [-6.174283, 106.949547];
   List campusButton = [false, false];

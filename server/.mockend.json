@@ -1,0 +1,10 @@
+{
+    "User": {
+        "id": 1,
+        "name": "Muhammad Jumadi",
+        "nim": "12345678990",
+        "location": "Harapan Indah",
+        "date": "Thur,01-09-2022",
+        "subject": "Android Dev"
+    }
+}

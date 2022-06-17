@@ -1,11 +1,6 @@
 import 'package:attendance_gps/views/attendace.dart';
-import 'package:attendance_gps/views/home.dart';
-import 'package:attendance_gps/views/test.dart';
 import 'package:flutter/material.dart';
-import 'package:attendance_gps/views/user.dart';
-import 'package:provider/provider.dart';
-
-import 'model/model.dart';
+import 'package:attendance_gps/views/history.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,12 +17,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: MyLocation(),
-      // AttendancePage(),
+      home: AttendancePage(),
       routes: {
         AttendancePage.routeName: ((context) => AttendancePage()),
-        HomePage.routeName: (context) => HomePage(),
-        UserPage.routeName: (context) => UserPage()
+        HistoryPage.routeName: (context) => HistoryPage()
       },
     );
   }

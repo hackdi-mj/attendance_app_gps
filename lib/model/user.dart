@@ -1,24 +1,36 @@
-class UserAttendance {
-  int id;
+class User {
+  int? id;
   String name;
   String nim;
   String location;
   String subject;
   String date;
 
-  UserAttendance(
-      this.id, this.name, this.date, this.location, this.nim, this.subject);
-  factory UserAttendance.fromJson(dynamic json) {
-    return UserAttendance(
-        json['id'] as int,
-        json['name'] as String,
-        json['nim'] as String,
-        json['location'] as String,
-        json['subject'] as String,
-        json['date'] as String);
-  }
-  @override
-  String toString() {
-    return '{ ${this.id}, ${this.name}, ${this.date}, ${this.location}, ${this.nim}, ${this.subject} }';
+  User({
+    this.id,
+    required this.name,
+    required this.nim,
+    required this.location,
+    required this.subject,
+    required this.date,
+  });
+
+  User.fromMap(Map<String, dynamic> data)
+      : id = data["id"],
+        name = data["name"],
+        nim = data["nim"],
+        location = data["location"],
+        date = data["subject"],
+        subject = data["date"];
+
+  Map<String, Object?> toMap() {
+    return {
+      "id": id,
+      "name": name,
+      "nim": nim,
+      "location": location,
+      "subject": subject,
+      "date": date,
+    };
   }
 }
